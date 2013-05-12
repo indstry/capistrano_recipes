@@ -35,11 +35,15 @@ namespace :postgresql do
   after 'postgresql:add_gpg','postgresql:install'
 
   desc "Create a database for this application."
-  task :create_database, :on_error => :continue, roles: :db, only: {primary: true} do
+  task :create_user, :on_error => :continue, roles: :db, only: {primary: true} do
     run %{#{sudo} -u postgres psql -c "create user #{postgresql_user} with password '#{postgresql_password}';"}
+  end
+  after "deploy:setup", "postgresql:create_user"
+
+  task :create_database, :on_error => :continue, roles: :db, only: {primary: true} do
     run %{#{sudo} -u postgres psql -c "create database #{postgresql_database} owner #{postgresql_user};"}
   end
-  after "deploy:setup", "postgresql:create_database"
+  after "postgresql:create_user", "postgresql:create_database"
 
   desc "Generate the database.yml configuration file."
   task :setup, roles: :app do

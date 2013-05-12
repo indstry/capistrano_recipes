@@ -6,11 +6,11 @@ namespace :rbenv do
   task :install, roles: :app,:on_error => :continue  do
     run "#{sudo} apt-get -y install curl git-core"
     run "curl -L https://raw.github.com/fesplugas/rbenv-installer/master/bin/rbenv-installer | bash"
-    
+
     bashrc = <<-BASHRC
-if [ -d $HOME/.rbenv ]; then 
-  export PATH="$HOME/.rbenv/bin:$PATH" 
-  eval "$(rbenv init -)" 
+if [ -d $HOME/.rbenv ]; then
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init -)"
 fi
 BASHRC
     put bashrc, "/tmp/rbenvrc"
@@ -28,9 +28,9 @@ BASHRC
         #use the default handler for all other text
         Capistrano::Configuration.default_io_proc.call(ch,stream,data)
       end
-      
+
     end
-      
+
     run "rbenv global #{ruby_version}"
     run "gem install bundler --no-ri --no-rdoc",:pty => true do |ch, stream, data|
       if data =~ /Overwrite.the.executable\?.\[yN\]/
