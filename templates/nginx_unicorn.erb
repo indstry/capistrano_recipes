@@ -1,0 +1,28 @@
+upstream unicorn<%= application %> {
+	server unix:/tmp/unicorn.<%= application %>.sock fail_timeout=0;
+}
+<% if nginx_normilizedomain && nginx_redirectdomains.length > 0 %>
+server {
+    listen       80;
+    server_name  <%= nginx_redirectdomains %>;
+    return       301 <%= nginx_domain %>$request_uri;
+}
+<% end %>
+server {
+	listen 80;
+  server_name <%= nginx_domain %>;
+	root <%= current_path %>/public;
+  try_files $uri/index.html $uri @unicorn<%= application %>;
+  access_log <%= shared_path %>/log/nginx/access.log;
+  error_log <%= shared_path %>/log/nginx/error.log;
+  client_max_body_size 500M;
+  client_body_buffer_size 128k;
+	location @unicorn<%= application %>{
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header Host $http_host;
+		proxy_redirect off;
+		proxy_pass http://unicorn<%= application %>;
+	}
+	error_page 500 502 503 504 /500.html;
+
+}
