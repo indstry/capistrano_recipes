@@ -2,18 +2,18 @@ require "bundler/capistrano"
 # require 'sidekiq/capistrano'
 
 # Comment recipes you don't use
-load 'config/recipes/assets'
-load "config/recipes/base"
-load "config/recipes/nginx"
-load "config/recipes/unicorn"
-load "config/recipes/postgresql"
-# load "config/recipes/mysql"
-load "config/recipes/redis"
-load "config/recipes/yamldb.rb"
-load "config/recipes/nodejs"
-load "config/recipes/imagemagick"
-load "config/recipes/rbenv"
-load "config/recipes/check"
+load 'config/capistrano_recipes/recipes/assets'
+load "config/capistrano_recipes/recipes/base"
+load "config/capistrano_recipes/recipes/nginx"
+load "config/capistrano_recipes/recipes/unicorn"
+load "config/capistrano_recipes/recipes/postgresql"
+# load "config/capistrano_recipes/mysql"
+load "config/capistrano_recipes/redis"
+load "config/capistrano_recipes/yamldb.rb"
+load "config/capistrano_recipes/nodejs"
+load "config/capistrano_recipes/imagemagick"
+load "config/capistrano_recipes/rbenv"
+load "config/capistrano_recipes/check"
 
 server "server_addr", :web, :app, :db, primary: true
 
